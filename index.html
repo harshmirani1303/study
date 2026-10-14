@@ -1,0 +1,3670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyHub — Student Dashboard</title>
+
+<style>
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+
+    --background: #f5f7fb;
+    --card: #ffffff;
+
+    --text: #171923;
+    --muted: #737887;
+
+    --border: #e4e7ee;
+
+    --soft: #f1f3f8;
+    --soft-hover: #e8ebff;
+
+    --green: #16a34a;
+    --red: #dc2626;
+    --orange: #d97706;
+
+    --shadow:
+        0 10px 30px rgba(20, 25, 40, 0.07);
+}
+
+body.dark {
+    --background: #0f1117;
+    --card: #181b23;
+
+    --text: #f4f6fb;
+    --muted: #9ba2b1;
+
+    --border: #2a2f3a;
+
+    --soft: #222733;
+    --soft-hover: #292f43;
+
+    --shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+body {
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background: var(--background);
+    color: var(--text);
+
+    min-height: 100vh;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    height: 72px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 500;
+
+    background: var(--card);
+
+    border-bottom:
+        1px solid var(--border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0 clamp(15px, 4vw, 40px);
+}
+
+.logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+.header-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.header-button {
+    border:
+        1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    padding:
+        10px 14px;
+
+    border-radius: 10px;
+
+    font-weight: 750;
+
+    transition: .2s;
+}
+
+.header-button:hover {
+    background: var(--soft);
+}
+
+.notes-button {
+    color: white;
+
+    background: var(--primary);
+
+    border-color: var(--primary);
+}
+
+.notes-button:hover {
+    background: var(--primary-hover);
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.container {
+    width: min(1450px, 100%);
+
+    margin: auto;
+
+    padding:
+        30px clamp(16px, 4vw, 40px) 60px;
+}
+
+.welcome {
+    margin-bottom: 28px;
+}
+
+.welcome h1 {
+    font-size:
+        clamp(26px, 4vw, 36px);
+
+    margin-bottom: 7px;
+
+    letter-spacing: -.5px;
+}
+
+.welcome p {
+    color: var(--muted);
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 34px;
+}
+
+.stat {
+    background: var(--card);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    box-shadow: var(--shadow);
+}
+
+.stat-icon {
+    font-size: 24px;
+
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.stat-number {
+    font-size: 29px;
+
+    font-weight: 900;
+
+    margin-top: 4px;
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    font-size: 23px;
+}
+
+/* =========================================================
+   SUBJECT GRID
+========================================================= */
+
+.subject-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 17px;
+}
+
+.subject-card {
+    background: var(--card);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 19px;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.subject-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 35px
+        rgba(20, 25, 40, .11);
+}
+
+.subject-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 17px;
+}
+
+.subject-name {
+    font-size: 18px;
+
+    font-weight: 850;
+
+    line-height: 1.3;
+}
+
+.subject-icon {
+    width: 44px;
+    height: 44px;
+
+    flex: 0 0 44px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 12px;
+
+    background: var(--soft);
+
+    font-size: 21px;
+}
+
+.subject-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 7px;
+}
+
+.subject-actions button {
+    border: none;
+
+    border-radius: 9px;
+
+    padding:
+        10px 5px;
+
+    background: var(--soft);
+
+    color: var(--text);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .18s;
+}
+
+.subject-actions button:hover {
+    background: var(--primary);
+
+    color: white;
+}
+
+/* =========================================================
+   TASK SECTION
+========================================================= */
+
+.task-section {
+    margin-top: 30px;
+
+    background: var(--card);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding:
+        clamp(17px, 3vw, 26px);
+
+    box-shadow: var(--shadow);
+}
+
+.task-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.task-header h2 {
+    font-size: 22px;
+}
+
+.search {
+    width: min(320px, 100%);
+
+    border:
+        1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    padding: 11px 13px;
+
+    border-radius: 10px;
+
+    outline: none;
+}
+
+.search:focus {
+    border-color: var(--primary);
+}
+
+/* =========================================================
+   EDITOR
+========================================================= */
+
+.editor {
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    background: var(--card);
+
+    margin-bottom: 22px;
+}
+
+.editor-fields {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        180px
+        150px
+        155px;
+
+    gap: 9px;
+
+    padding: 13px;
+
+    background: var(--soft);
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.input,
+.select {
+    width: 100%;
+
+    border:
+        1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    border-radius: 9px;
+
+    padding: 11px 12px;
+
+    outline: none;
+}
+
+.input:focus,
+.select:focus {
+    border-color: var(--primary);
+}
+
+/* =========================================================
+   RICH EDITOR
+========================================================= */
+
+.rich-editor {
+    min-height: 230px;
+
+    max-height: 500px;
+
+    overflow-y: auto;
+
+    outline: none;
+
+    padding: 18px;
+
+    line-height: 1.7;
+
+    word-break: break-word;
+}
+
+.rich-editor:empty::before {
+    content:
+        "Write your task here, or paste text from Word, Google Docs, a website, etc...";
+
+    color: #9aa1af;
+
+    pointer-events: none;
+}
+
+.rich-editor img {
+    max-width: 100%;
+
+    height: auto;
+
+    border-radius: 8px;
+
+    margin: 8px 0;
+}
+
+.rich-editor table {
+    max-width: 100%;
+
+    border-collapse: collapse;
+
+    margin: 10px 0;
+}
+
+.rich-editor td,
+.rich-editor th {
+    border:
+        1px solid var(--border);
+
+    padding: 6px;
+}
+
+/* =========================================================
+   EDITOR FOOTER
+========================================================= */
+
+.editor-footer {
+    min-height: 58px;
+
+    border-top:
+        1px solid var(--border);
+
+    padding:
+        10px 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.editor-tools {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.tool {
+    border:
+        1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    padding:
+        7px 10px;
+
+    border-radius: 8px;
+
+    font-weight: 750;
+}
+
+.tool:hover {
+    background: var(--soft);
+}
+
+.file-button {
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    padding:
+        7px 10px;
+
+    border-radius: 8px;
+
+    font-weight: 750;
+}
+
+.file-button input {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0;
+
+    cursor: pointer;
+}
+
+.file-status {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.save-button {
+    border: none;
+
+    background: var(--primary);
+
+    color: white;
+
+    padding:
+        11px 17px;
+
+    border-radius: 9px;
+
+    font-weight: 850;
+
+    white-space: nowrap;
+}
+
+.save-button:hover {
+    background: var(--primary-hover);
+}
+
+/* =========================================================
+   TASK LIST
+========================================================= */
+
+.task-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.empty {
+    text-align: center;
+
+    padding: 35px 20px;
+
+    border-radius: 13px;
+
+    background: var(--soft);
+
+    color: var(--muted);
+
+    line-height: 1.7;
+}
+
+.task-card {
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    background: var(--card);
+
+    transition: .18s;
+}
+
+.task-card:hover {
+    border-color:
+        rgba(99,102,241,.45);
+}
+
+.task-card.completed {
+    opacity: .65;
+}
+
+.task-card.completed .task-title {
+    text-decoration: line-through;
+}
+
+.task-main {
+    padding: 17px;
+}
+
+.task-title {
+    font-size: 17px;
+
+    font-weight: 850;
+
+    margin-bottom: 8px;
+
+    word-break: break-word;
+}
+
+.task-description {
+    color: var(--muted);
+
+    line-height: 1.6;
+
+    max-height: 170px;
+
+    overflow: hidden;
+
+    word-break: break-word;
+
+    margin-bottom: 12px;
+}
+
+.task-description img {
+    max-width: 100%;
+
+    max-height: 160px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+.task-description table {
+    max-width: 100%;
+
+    overflow: auto;
+}
+
+.task-description td,
+.task-description th {
+    border:
+        1px solid var(--border);
+
+    padding: 5px;
+}
+
+.task-meta {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+.badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    padding:
+        5px 8px;
+
+    border-radius: 7px;
+
+    background: var(--soft);
+
+    color: var(--text);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.priority-high {
+    color: var(--red);
+}
+
+.priority-medium {
+    color: var(--orange);
+}
+
+.priority-low {
+    color: var(--green);
+}
+
+/* =========================================================
+   ATTACHMENTS
+========================================================= */
+
+.attachments {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-top: 13px;
+}
+
+.attachment {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 9px 10px;
+
+    border:
+        1px solid var(--border);
+
+    background: var(--soft);
+
+    border-radius: 9px;
+}
+
+.attachment-name {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+.attachment-buttons {
+    display: flex;
+
+    gap: 5px;
+
+    flex-shrink: 0;
+}
+
+.attachment-buttons button {
+    border: none;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    border-radius: 7px;
+
+    padding: 6px 8px;
+
+    font-size: 11px;
+
+    font-weight: 750;
+}
+
+/* =========================================================
+   TASK ACTIONS
+========================================================= */
+
+.task-actions {
+    display: flex;
+
+    gap: 7px;
+
+    padding:
+        11px 13px;
+
+    background: var(--soft);
+
+    border-top:
+        1px solid var(--border);
+}
+
+.task-action {
+    border: none;
+
+    padding:
+        8px 10px;
+
+    border-radius: 8px;
+
+    font-weight: 750;
+
+    font-size: 12px;
+
+    background: var(--card);
+
+    color: var(--text);
+}
+
+.task-action:hover {
+    background: var(--soft-hover);
+}
+
+.task-action.done {
+    color: var(--green);
+}
+
+.task-action.delete {
+    color: var(--red);
+}
+
+.task-action.edit {
+    color: var(--primary);
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 18px;
+
+    background:
+        rgba(0,0,0,.58);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-box {
+    width: min(900px, 100%);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    background: var(--card);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.3);
+
+    padding:
+        clamp(18px, 4vw, 26px);
+}
+
+.modal-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    font-size: 22px;
+}
+
+.close-button {
+    width: 37px;
+    height: 37px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: var(--soft);
+
+    color: var(--text);
+
+    font-size: 21px;
+}
+
+.close-button:hover {
+    background: var(--soft-hover);
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.notes-editor {
+    min-height: 430px;
+
+    max-height: 65vh;
+
+    overflow-y: auto;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    padding: 18px;
+
+    outline: none;
+
+    line-height: 1.7;
+}
+
+.notes-editor:empty::before {
+    content:
+        "Write your notes here or paste a document...";
+    color: #9aa1af;
+}
+
+.notes-footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 12px;
+}
+
+.clear-button {
+    border: none;
+
+    background: #fee2e2;
+
+    color: var(--red);
+
+    padding:
+        10px 14px;
+
+    border-radius: 9px;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 24px;
+
+    transform:
+        translate(-50%, 100px);
+
+    z-index: 2000;
+
+    background: #171923;
+
+    color: white;
+
+    padding:
+        12px 17px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        .25s ease;
+}
+
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+    .subject-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .editor-fields {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+
+    .header {
+        height: 64px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .notes-button {
+        padding:
+            9px 11px;
+    }
+
+    .theme-button {
+        padding:
+            9px 10px;
+    }
+
+    .stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .subject-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .task-header {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .editor-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-footer {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .editor-tools {
+        width: 100%;
+    }
+
+    .save-button {
+        width: 100%;
+    }
+
+    .task-actions {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 430px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .subject-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .header-actions {
+        gap: 5px;
+    }
+
+    .theme-button {
+        font-size: 0;
+    }
+
+    .theme-button::before {
+        content: "🌙";
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="logo">
+        📚 Study<span>Hub</span>
+    </div>
+
+    <div class="header-actions">
+
+        <button
+            class="header-button theme-button"
+            id="themeButton"
+            onclick="toggleTheme()">
+            🌙 Dark
+        </button>
+
+        <button
+            class="header-button notes-button"
+            onclick="openNotes()">
+            📝 Notes
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+    <section class="welcome">
+
+        <h1>
+            Welcome to your Study Dashboard 👋
+        </h1>
+
+        <p>
+            Manage your projects, homework, classwork,
+            documents and notes in one place.
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================
+         STATS
+    ===================================================== -->
+
+    <section class="stats">
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <div class="stat-label">
+                Subjects
+            </div>
+
+            <div
+                class="stat-number"
+                id="subjectCount">
+                12
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📋
+            </div>
+
+            <div class="stat-label">
+                Total Tasks
+            </div>
+
+            <div
+                class="stat-number"
+                id="taskCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                🚀
+            </div>
+
+            <div class="stat-label">
+                Projects
+            </div>
+
+            <div
+                class="stat-number"
+                id="projectCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📖
+            </div>
+
+            <div class="stat-label">
+                Homework
+            </div>
+
+            <div
+                class="stat-number"
+                id="homeworkCount">
+                0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================
+         SUBJECTS
+    ===================================================== -->
+
+    <section>
+
+        <div class="section-header">
+
+            <h2>
+                📚 My Subjects
+            </h2>
+
+        </div>
+
+        <div
+            class="subject-grid"
+            id="subjectGrid">
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================
+         TASK SECTION
+    ===================================================== -->
+
+    <section class="task-section">
+
+        <div class="task-header">
+
+            <h2>
+                📝 My Tasks
+            </h2>
+
+            <input
+                class="search"
+                id="searchInput"
+                type="search"
+                placeholder="🔎 Search tasks..."
+                oninput="renderTasks()">
+
+        </div>
+
+
+        <!-- ==================================================
+             TASK EDITOR
+        =================================================== -->
+
+        <div class="editor">
+
+            <div class="editor-fields">
+
+                <input
+                    class="input"
+                    id="taskTitle"
+                    type="text"
+                    placeholder="Task title...">
+
+
+                <select
+                    class="select"
+                    id="taskSubject">
+                </select>
+
+
+                <select
+                    class="select"
+                    id="taskType">
+
+                    <option value="Project">
+                        Project
+                    </option>
+
+                    <option value="Homework">
+                        Homework
+                    </option>
+
+                    <option value="Classwork">
+                        Classwork
+                    </option>
+
+                </select>
+
+
+                <select
+                    class="select"
+                    id="taskPriority">
+
+                    <option value="Low">
+                        Low Priority
+                    </option>
+
+                    <option
+                        value="Medium"
+                        selected>
+                        Medium Priority
+                    </option>
+
+                    <option value="High">
+                        High Priority
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!--
+                CONTENTEDITABLE:
+
+                This allows:
+                - normal typing
+                - rich text pasting
+                - Word content
+                - Google Docs content
+                - tables
+                - images copied to clipboard
+            -->
+
+            <div
+                id="taskDescription"
+                class="rich-editor"
+                contenteditable="true"
+                spellcheck="true">
+            </div>
+
+
+            <div class="editor-footer">
+
+                <div class="editor-tools">
+
+                    <button
+                        class="tool"
+                        onclick="formatText('bold')">
+                        <b>B</b>
+                    </button>
+
+                    <button
+                        class="tool"
+                        onclick="formatText('italic')">
+                        <i>I</i>
+                    </button>
+
+                    <button
+                        class="tool"
+                        onclick="formatText('underline')">
+                        <u>U</u>
+                    </button>
+
+
+                    <button
+                        class="tool"
+                        onclick="formatText('insertUnorderedList')">
+                        • List
+                    </button>
+
+
+                    <button
+                        class="tool"
+                        onclick="formatText('formatBlock','h3')">
+                        H
+                    </button>
+
+
+                    <label class="file-button">
+
+                        📎 Attach Files
+
+                        <input
+                            id="fileInput"
+                            type="file"
+                            multiple
+                            onchange="handleFiles()">
+
+                    </label>
+
+
+                    <span
+                        class="file-status"
+                        id="fileStatus">
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="save-button"
+                    id="saveTaskButton"
+                    onclick="saveTask()">
+
+                    ➕ Add Task
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             TASK LIST
+        =================================================== -->
+
+        <div
+            class="task-list"
+            id="taskList">
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ========================================================
+     NOTES MODAL
+========================================================= -->
+
+<div
+    class="modal"
+    id="notesModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>
+                📝 My Notes
+            </h2>
+
+            <button
+                class="close-button"
+                onclick="closeNotes()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            id="notesEditor"
+            class="notes-editor"
+            contenteditable="true"
+            spellcheck="true">
+        </div>
+
+
+        <div class="notes-footer">
+
+            <button
+                class="clear-button"
+                onclick="clearNotes()">
+                🗑️ Clear Notes
+            </button>
+
+
+            <button
+                class="save-button"
+                onclick="saveNotes()">
+                💾 Save Notes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="toast"
+    id="toast">
+</div>
+
+
+<script>
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+const subjects = [
+
+    {
+        name: "French",
+        icon: "🇫🇷"
+    },
+
+    {
+        name: "Arabic",
+        icon: "🇦🇪"
+    },
+
+    {
+        name: "English Language",
+        icon: "📘"
+    },
+
+    {
+        name: "English Literature",
+        icon: "📖"
+    },
+
+    {
+        name: "Biology",
+        icon: "🧬"
+    },
+
+    {
+        name: "Physics",
+        icon: "⚡"
+    },
+
+    {
+        name: "Chemistry",
+        icon: "🧪"
+    },
+
+    {
+        name: "History",
+        icon: "🏛️"
+    },
+
+    {
+        name: "Geography",
+        icon: "🌍"
+    },
+
+    {
+        name: "MSCS",
+        icon: "💻"
+    },
+
+    {
+        name: "Computers",
+        icon: "🖥️"
+    },
+
+    {
+        name: "Mathematics",
+        icon: "📐"
+    }
+
+];
+
+
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
+
+let tasks = [];
+
+let selectedFiles = [];
+
+let editingTaskId = null;
+
+
+/* =========================================================
+   INDEXED DB
+========================================================= */
+
+const DB_NAME = "StudyHubDatabase";
+
+const DB_VERSION = 1;
+
+const STORE_NAME = "files";
+
+let db;
+
+
+/*
+    IndexedDB is used because localStorage
+    is not suitable for storing actual files.
+*/
+
+function openDatabase() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const request =
+                indexedDB.open(
+                    DB_NAME,
+                    DB_VERSION
+                );
+
+
+            request.onupgradeneeded =
+                function(event) {
+
+                    const database =
+                        event.target.result;
+
+
+                    if (
+                        !database.objectStoreNames
+                            .contains(STORE_NAME)
+                    ) {
+
+                        database.createObjectStore(
+                            STORE_NAME,
+                            {
+                                keyPath: "id"
+                            }
+                        );
+
+                    }
+
+                };
+
+
+            request.onsuccess =
+                function(event) {
+
+                    db =
+                        event.target.result;
+
+                    resolve(db);
+
+                };
+
+
+            request.onerror =
+                function() {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FILE DATABASE FUNCTIONS
+========================================================= */
+
+function saveFileToDB(file) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const id =
+                crypto.randomUUID();
+
+
+            const record = {
+
+                id: id,
+
+                name: file.name,
+
+                type:
+                    file.type ||
+                    "application/octet-stream",
+
+                size: file.size,
+
+                blob: file
+
+            };
+
+
+            const request =
+                store.put(record);
+
+
+            request.onsuccess =
+                function() {
+
+                    resolve(record);
+
+                };
+
+
+            request.onerror =
+                function() {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+function getFileFromDB(id) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readonly"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.get(id);
+
+
+            request.onsuccess =
+                function() {
+
+                    resolve(
+                        request.result
+                    );
+
+                };
+
+
+            request.onerror =
+                function() {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+function deleteFileFromDB(id) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.delete(id);
+
+
+            request.onsuccess =
+                function() {
+
+                    resolve();
+
+                };
+
+
+            request.onerror =
+                function() {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function loadTasks() {
+
+    try {
+
+        tasks =
+            JSON.parse(
+                localStorage.getItem(
+                    "studyhub_tasks"
+                )
+            ) || [];
+
+    } catch {
+
+        tasks = [];
+
+    }
+
+}
+
+
+function saveTasks() {
+
+    localStorage.setItem(
+        "studyhub_tasks",
+        JSON.stringify(tasks)
+    );
+
+}
+
+
+/* =========================================================
+   RENDER SUBJECTS
+========================================================= */
+
+function renderSubjects() {
+
+    const grid =
+        document.getElementById(
+            "subjectGrid"
+        );
+
+
+    const select =
+        document.getElementById(
+            "taskSubject"
+        );
+
+
+    grid.innerHTML = "";
+
+    select.innerHTML = "";
+
+
+    subjects.forEach(
+        subject => {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "subject-card";
+
+
+            card.innerHTML = `
+
+                <div class="subject-top">
+
+                    <div class="subject-name">
+                        ${escapeHTML(subject.name)}
+                    </div>
+
+                    <div class="subject-icon">
+                        ${subject.icon}
+                    </div>
+
+                </div>
+
+
+                <div class="subject-actions">
+
+                    <button
+                        onclick="chooseTask('${escapeAttribute(subject.name)}','Project')">
+                        🚀 Project
+                    </button>
+
+                    <button
+                        onclick="chooseTask('${escapeAttribute(subject.name)}','Homework')">
+                        📖 Homework
+                    </button>
+
+                    <button
+                        onclick="chooseTask('${escapeAttribute(subject.name)}','Classwork')">
+                        ✏️ Classwork
+                    </button>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                subject.name;
+
+
+            option.textContent =
+                subject.name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CHOOSE TASK
+========================================================= */
+
+function chooseTask(
+    subject,
+    type
+) {
+
+    if (editingTaskId !== null) {
+
+        cancelEdit();
+
+    }
+
+
+    document.getElementById(
+        "taskSubject"
+    ).value = subject;
+
+
+    document.getElementById(
+        "taskType"
+    ).value = type;
+
+
+    document.getElementById(
+        "taskTitle"
+    ).focus();
+
+
+    document.querySelector(
+        ".task-section"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================================================
+   HANDLE FILES
+========================================================= */
+
+function handleFiles() {
+
+    const input =
+        document.getElementById(
+            "fileInput"
+        );
+
+
+    selectedFiles =
+        Array.from(
+            input.files
+        );
+
+
+    updateFileStatus();
+
+}
+
+
+function updateFileStatus() {
+
+    const status =
+        document.getElementById(
+            "fileStatus"
+        );
+
+
+    if (
+        selectedFiles.length === 0
+    ) {
+
+        status.textContent = "";
+
+        return;
+
+    }
+
+
+    const totalSize =
+        selectedFiles.reduce(
+            (
+                total,
+                file
+            ) =>
+                total + file.size,
+            0
+        );
+
+
+    status.textContent =
+        `${selectedFiles.length} file(s) • ${formatBytes(totalSize)}`;
+
+}
+
+
+/* =========================================================
+   SAVE TASK
+========================================================= */
+
+async function saveTask() {
+
+    const title =
+        document.getElementById(
+            "taskTitle"
+        ).value.trim();
+
+
+    const description =
+        document.getElementById(
+            "taskDescription"
+        ).innerHTML.trim();
+
+
+    const subject =
+        document.getElementById(
+            "taskSubject"
+        ).value;
+
+
+    const type =
+        document.getElementById(
+            "taskType"
+        ).value;
+
+
+    const priority =
+        document.getElementById(
+            "taskPriority"
+        ).value;
+
+
+    if (!title) {
+
+        showToast(
+            "Please enter a task title."
+        );
+
+        document.getElementById(
+            "taskTitle"
+        ).focus();
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "saveTaskButton"
+        );
+
+
+    button.disabled = true;
+
+
+    try {
+
+        /*
+            EDIT EXISTING TASK
+        */
+
+        if (
+            editingTaskId !== null
+        ) {
+
+            const task =
+                tasks.find(
+                    item =>
+                        item.id ===
+                        editingTaskId
+                );
+
+
+            if (!task) {
+
+                cancelEdit();
+
+                return;
+
+            }
+
+
+            task.title =
+                title;
+
+
+            task.description =
+                description;
+
+
+            task.subject =
+                subject;
+
+
+            task.type =
+                type;
+
+
+            task.priority =
+                priority;
+
+
+            /*
+                Add newly selected files
+                to the existing task.
+            */
+
+            for (
+                const file
+                of selectedFiles
+            ) {
+
+                const record =
+                    await saveFileToDB(
+                        file
+                    );
+
+
+                task.attachments.push({
+
+                    id: record.id,
+
+                    name: record.name,
+
+                    type: record.type,
+
+                    size: record.size
+
+                });
+
+            }
+
+
+            saveTasks();
+
+            clearEditor();
+
+            renderTasks();
+
+            showToast(
+                "Task updated successfully! ✅"
+            );
+
+
+            return;
+
+        }
+
+
+        /*
+            CREATE NEW TASK
+        */
+
+        const attachments = [];
+
+
+        for (
+            const file
+            of selectedFiles
+        ) {
+
+            const record =
+                await saveFileToDB(
+                    file
+                );
+
+
+            attachments.push({
+
+                id: record.id,
+
+                name: record.name,
+
+                type: record.type,
+
+                size: record.size
+
+            });
+
+        }
+
+
+        const task = {
+
+            id: Date.now(),
+
+            title: title,
+
+            description:
+                description,
+
+            subject: subject,
+
+            type: type,
+
+            priority: priority,
+
+            completed: false,
+
+            created:
+                new Date()
+                    .toLocaleString(),
+
+            attachments:
+                attachments
+
+        };
+
+
+        tasks.unshift(task);
+
+
+        saveTasks();
+
+
+        clearEditor();
+
+
+        renderTasks();
+
+
+        showToast(
+            "Task added successfully! 🎉"
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        showToast(
+            "Something went wrong saving the task."
+        );
+
+    }
+
+    finally {
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR EDITOR
+========================================================= */
+
+function clearEditor() {
+
+    editingTaskId = null;
+
+    selectedFiles = [];
+
+
+    document.getElementById(
+        "taskTitle"
+    ).value = "";
+
+
+    document.getElementById(
+        "taskDescription"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "taskPriority"
+    ).value = "Medium";
+
+
+    document.getElementById(
+        "fileInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "fileStatus"
+    ).textContent = "";
+
+
+    document.getElementById(
+        "saveTaskButton"
+    ).textContent =
+        "➕ Add Task";
+
+}
+
+
+/* =========================================================
+   EDIT TASK
+========================================================= */
+
+function editTask(id) {
+
+    const task =
+        tasks.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!task) return;
+
+
+    editingTaskId = id;
+
+
+    document.getElementById(
+        "taskTitle"
+    ).value =
+        task.title;
+
+
+    document.getElementById(
+        "taskDescription"
+    ).innerHTML =
+        task.description || "";
+
+
+    document.getElementById(
+        "taskSubject"
+    ).value =
+        task.subject;
+
+
+    document.getElementById(
+        "taskType"
+    ).value =
+        task.type;
+
+
+    document.getElementById(
+        "taskPriority"
+    ).value =
+        task.priority || "Medium";
+
+
+    selectedFiles = [];
+
+
+    document.getElementById(
+        "fileInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "fileStatus"
+    ).textContent =
+        task.attachments &&
+        task.attachments.length
+            ? `${task.attachments.length} saved attachment(s)`
+            : "";
+
+
+    document.getElementById(
+        "saveTaskButton"
+    ).textContent =
+        "💾 Update Task";
+
+
+    document.querySelector(
+        ".task-section"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
+
+    document.getElementById(
+        "taskTitle"
+    ).focus();
+
+}
+
+
+/* =========================================================
+   CANCEL EDIT
+========================================================= */
+
+function cancelEdit() {
+
+    clearEditor();
+
+}
+
+
+/* =========================================================
+   TOGGLE TASK
+========================================================= */
+
+function toggleTask(id) {
+
+    const task =
+        tasks.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!task) return;
+
+
+    task.completed =
+        !task.completed;
+
+
+    saveTasks();
+
+    renderTasks();
+
+
+    showToast(
+        task.completed
+            ? "Task completed! 🎉"
+            : "Task marked as active."
+    );
+
+}
+
+
+/* =========================================================
+   DELETE TASK
+========================================================= */
+
+async function deleteTask(id) {
+
+    const task =
+        tasks.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!task) return;
+
+
+    if (
+        !confirm(
+            `Delete "${task.title}"?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        Array.isArray(
+            task.attachments
+        )
+    ) {
+
+        for (
+            const attachment
+            of task.attachments
+        ) {
+
+            try {
+
+                await deleteFileFromDB(
+                    attachment.id
+                );
+
+            } catch {
+
+                /* Ignore missing file */
+
+            }
+
+        }
+
+    }
+
+
+    tasks =
+        tasks.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveTasks();
+
+    renderTasks();
+
+
+    showToast(
+        "Task deleted."
+    );
+
+}
+
+
+/* =========================================================
+   RENDER TASKS
+========================================================= */
+
+function renderTasks() {
+
+    const list =
+        document.getElementById(
+            "taskList"
+        );
+
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value
+            .trim()
+            .toLowerCase();
+
+
+    list.innerHTML = "";
+
+
+    const filtered =
+        tasks.filter(
+            task => {
+
+                const text =
+                    [
+                        task.title,
+                        task.subject,
+                        task.type,
+                        task.priority,
+                        stripHTML(
+                            task.description || ""
+                        )
+                    ]
+                    .join(" ")
+                    .toLowerCase();
+
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
+
+    if (
+        filtered.length === 0
+    ) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                📚 No tasks found.
+
+                <br>
+
+                Choose Project, Homework
+                or Classwork above to
+                create your first task.
+
+            </div>
+
+        `;
+
+
+        updateStats();
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        task => {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "task-card" +
+                (
+                    task.completed
+                        ? " completed"
+                        : ""
+                );
+
+
+            const description =
+                task.description ||
+                "<span>No description added.</span>";
+
+
+            card.innerHTML = `
+
+                <div class="task-main">
+
+                    <div class="task-title">
+                        ${escapeHTML(task.title)}
+                    </div>
+
+
+                    <div class="task-description">
+                        ${description}
+                    </div>
+
+
+                    <div class="task-meta">
+
+                        <span class="badge">
+                            📚 ${escapeHTML(task.subject)}
+                        </span>
+
+                        <span class="badge">
+                            ${getTypeIcon(task.type)}
+                            ${escapeHTML(task.type)}
+                        </span>
+
+                        <span
+                            class="badge priority-${String(task.priority).toLowerCase()}">
+
+                            ${getPriorityIcon(task.priority)}
+                            ${escapeHTML(task.priority)}
+
+                        </span>
+
+                        <span class="badge">
+                            🕒 ${escapeHTML(task.created)}
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="attachments"
+                        id="attachments-${task.id}">
+                    </div>
+
+                </div>
+
+
+                <div class="task-actions">
+
+                    <button
+                        class="task-action done"
+                        onclick="toggleTask(${task.id})">
+
+                        ${
+                            task.completed
+                                ? "↩ Undo"
+                                : "✓ Complete"
+                        }
+
+                    </button>
+
+
+                    <button
+                        class="task-action edit"
+                        onclick="editTask(${task.id})">
+
+                        ✏️ Edit
+
+                    </button>
+
+
+                    <button
+                        class="task-action delete"
+                        onclick="deleteTask(${task.id})">
+
+                        🗑️ Delete
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(card);
+
+
+            renderAttachments(task);
+
+        }
+    );
+
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   RENDER ATTACHMENTS
+========================================================= */
+
+function renderAttachments(task) {
+
+    const container =
+        document.getElementById(
+            `attachments-${task.id}`
+        );
+
+
+    if (
+        !container ||
+        !task.attachments ||
+        task.attachments.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    task.attachments.forEach(
+        attachment => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "attachment";
+
+
+            row.innerHTML = `
+
+                <div
+                    class="attachment-name"
+                    title="${escapeAttribute(attachment.name)}">
+
+                    📎 ${escapeHTML(attachment.name)}
+
+                    <small>
+                        (${formatBytes(attachment.size)})
+                    </small>
+
+                </div>
+
+
+                <div class="attachment-buttons">
+
+                    <button
+                        onclick="openAttachment('${attachment.id}')">
+
+                        👁️ Open
+
+                    </button>
+
+
+                    <button
+                        onclick="downloadAttachment('${attachment.id}')">
+
+                        ⬇️ Save
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   OPEN ATTACHMENT
+========================================================= */
+
+async function openAttachment(id) {
+
+    try {
+
+        const record =
+            await getFileFromDB(id);
+
+
+        if (!record) {
+
+            showToast(
+                "File could not be found."
+            );
+
+            return;
+
+        }
+
+
+        const url =
+            URL.createObjectURL(
+                record.blob
+            );
+
+
+        window.open(
+            url,
+            "_blank"
+        );
+
+
+        setTimeout(
+            () =>
+                URL.revokeObjectURL(url),
+            60000
+        );
+
+    }
+
+    catch {
+
+        showToast(
+            "Unable to open file."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DOWNLOAD ATTACHMENT
+========================================================= */
+
+async function downloadAttachment(id) {
+
+    try {
+
+        const record =
+            await getFileFromDB(id);
+
+
+        if (!record) {
+
+            showToast(
+                "File could not be found."
+            );
+
+            return;
+
+        }
+
+
+        const url =
+            URL.createObjectURL(
+                record.blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href = url;
+
+        link.download =
+            record.name;
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        setTimeout(
+            () =>
+                URL.revokeObjectURL(url),
+            5000
+        );
+
+    }
+
+    catch {
+
+        showToast(
+            "Unable to save file."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats() {
+
+    document.getElementById(
+        "taskCount"
+    ).textContent =
+        tasks.length;
+
+
+    document.getElementById(
+        "projectCount"
+    ).textContent =
+        tasks.filter(
+            task =>
+                task.type === "Project"
+        ).length;
+
+
+    document.getElementById(
+        "homeworkCount"
+    ).textContent =
+        tasks.filter(
+            task =>
+                task.type === "Homework"
+        ).length;
+
+
+    document.getElementById(
+        "subjectCount"
+    ).textContent =
+        subjects.length;
+
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+function openNotes() {
+
+    const editor =
+        document.getElementById(
+            "notesEditor"
+        );
+
+
+    editor.innerHTML =
+        localStorage.getItem(
+            "studyhub_notes"
+        ) || "";
+
+
+    document.getElementById(
+        "notesModal"
+    ).classList.add(
+        "active"
+    );
+
+
+    editor.focus();
+
+}
+
+
+function closeNotes() {
+
+    document.getElementById(
+        "notesModal"
+    ).classList.remove(
+        "active"
+    );
+
+}
+
+
+function saveNotes() {
+
+    const content =
+        document.getElementById(
+            "notesEditor"
+        ).innerHTML;
+
+
+    localStorage.setItem(
+        "studyhub_notes",
+        content
+    );
+
+
+    showToast(
+        "Notes saved! 📝"
+    );
+
+}
+
+
+function clearNotes() {
+
+    if (
+        !confirm(
+            "Clear all notes?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "notesEditor"
+    ).innerHTML = "";
+
+
+    localStorage.removeItem(
+        "studyhub_notes"
+    );
+
+
+    showToast(
+        "Notes cleared."
+    );
+
+}
+
+
+/* =========================================================
+   RICH TEXT
+========================================================= */
+
+function formatText(
+    command,
+    value = null
+) {
+
+    document.execCommand(
+        command,
+        false,
+        value
+    );
+
+
+    document.getElementById(
+        "taskDescription"
+    ).focus();
+
+}
+
+
+/* =========================================================
+   PASTE SUPPORT
+========================================================= */
+
+function setupPasteSupport() {
+
+    const editors = [
+
+        document.getElementById(
+            "taskDescription"
+        ),
+
+        document.getElementById(
+            "notesEditor"
+        )
+
+    ];
+
+
+    editors.forEach(
+        editor => {
+
+            editor.addEventListener(
+                "paste",
+                function(event) {
+
+                    /*
+                        Normal browser paste is intentionally
+                        allowed so rich content from documents
+                        can be pasted.
+
+                        Images copied to the clipboard can also
+                        be inserted by compatible browsers.
+                    */
+
+                    console.log(
+                        "Content pasted into editor."
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+
+    const dark =
+        document.body.classList.contains(
+            "dark"
+        );
+
+
+    localStorage.setItem(
+        "studyhub_dark",
+        dark
+    );
+
+
+    updateThemeButton();
+
+}
+
+
+function updateThemeButton() {
+
+    const button =
+        document.getElementById(
+            "themeButton"
+        );
+
+
+    const dark =
+        document.body.classList.contains(
+            "dark"
+        );
+
+
+    button.textContent =
+        dark
+            ? "☀️ Light"
+            : "🌙 Dark";
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
+
+
+function escapeAttribute(text) {
+
+    return String(text)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+}
+
+
+/* =========================================================
+   STRIP HTML
+========================================================= */
+
+function stripHTML(html) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.innerHTML =
+        html;
+
+
+    return div.textContent ||
+        div.innerText ||
+        "";
+
+}
+
+
+/* =========================================================
+   ICONS
+========================================================= */
+
+function getTypeIcon(type) {
+
+    if (
+        type === "Project"
+    ) {
+
+        return "🚀";
+
+    }
+
+
+    if (
+        type === "Homework"
+    ) {
+
+        return "📖";
+
+    }
+
+
+    return "✏️";
+
+}
+
+
+function getPriorityIcon(priority) {
+
+    if (
+        priority === "High"
+    ) {
+
+        return "🔴";
+
+    }
+
+
+    if (
+        priority === "Medium"
+    ) {
+
+        return "🟠";
+
+    }
+
+
+    return "🟢";
+
+}
+
+
+/* =========================================================
+   FILE SIZE
+========================================================= */
+
+function formatBytes(bytes) {
+
+    if (
+        bytes === 0
+    ) {
+
+        return "0 B";
+
+    }
+
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    const index =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        bytes /
+        Math.pow(
+            1024,
+            index
+        )
+    ).toFixed(
+        index === 0
+            ? 0
+            : 1
+    ) +
+    " " +
+    units[index];
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+document
+    .getElementById("notesModal")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeNotes();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeNotes();
+
+        }
+
+
+        /*
+            CTRL + ENTER
+            saves the current task.
+        */
+
+        if (
+            event.ctrlKey &&
+            event.key === "Enter"
+        ) {
+
+            saveTask();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+async function initialize() {
+
+    try {
+
+        await openDatabase();
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "IndexedDB unavailable:",
+            error
+        );
+
+        showToast(
+            "File storage is unavailable in this browser."
+        );
+
+    }
+
+
+    loadTasks();
+
+    renderSubjects();
+
+    renderTasks();
+
+    setupPasteSupport();
+
+
+    if (
+        localStorage.getItem(
+            "studyhub_dark"
+        ) === "true"
+    ) {
+
+        document.body.classList.add(
+            "dark"
+        );
+
+    }
+
+
+    updateThemeButton();
+
+}
+
+
+initialize();
+
+</script>
+
+</body>
+</html>
